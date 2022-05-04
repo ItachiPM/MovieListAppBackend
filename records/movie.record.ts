@@ -14,11 +14,11 @@ export class MovieRecord implements MovieEntity {
     title: string;
 
     constructor(obj: MovieEntity) {
-        if(obj.rate > 10 || obj.rate < 1) {
+        if (obj.rate > 10 || obj.rate < 1) {
             throw new ValidationError('rate should be a number between 1-10')
         }
 
-        if(obj.title.length >  50 || obj.title.length < 0) {
+        if (obj.title.length > 50 || obj.title.length < 0) {
             throw new ValidationError('title of movie is incorrect written. title should have length between 1-50 signs.')
         }
 
@@ -35,11 +35,11 @@ export class MovieRecord implements MovieEntity {
     }
 
     async insert(): Promise<void> {
-        if(await this.checkGenre(this.genre)) {
+        if (await this.checkGenre(this.genre)) {
             throw new ValidationError('unknown genre, different with genres in database');
         }
 
-        if(!this.id) {
+        if (!this.id) {
             this.id = uuid();
         }
 
@@ -52,7 +52,7 @@ export class MovieRecord implements MovieEntity {
     }
 
     async update(): Promise<void> {
-        if(await this.checkGenre(this.genre)) {
+        if (await this.checkGenre(this.genre)) {
             throw new ValidationError('unknown genre, different with genres in database');
         }
 
@@ -62,8 +62,10 @@ export class MovieRecord implements MovieEntity {
         })
     }
 
-    static async getAll(): Promise<MovieEntity[]> {
-        const [results] = await pool.execute('SELECT * FROM `usermovie`') as MovieRecordResponseType;
+    static async getAllOfGenre(genre: string): Promise<MovieEntity[]> {
+        const [results] = await pool.execute('SELECT * FROM `usermovie` WHERE `genre` = :genre', {
+                genre,
+            }) as MovieRecordResponseType;
 
         return results.map(obj => new MovieRecord(obj))
     }
