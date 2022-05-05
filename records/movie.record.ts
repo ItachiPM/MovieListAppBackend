@@ -2,7 +2,7 @@ import {ValidationError} from "../utils/error";
 import {GenreRecord} from "./genre.record";
 import {v4 as uuid} from 'uuid';
 import {pool} from "../database/db"
-import {MovieEntity} from "../types/movie/movie.record";
+import {MovieEntity} from "../types";
 import {FieldPacket} from "mysql2";
 
 type MovieRecordResponseType = [MovieRecord[], FieldPacket[]]
@@ -63,7 +63,7 @@ export class MovieRecord implements MovieEntity {
     }
 
     static async getAllOfGenre(genre: string): Promise<MovieEntity[]> {
-        const [results] = await pool.execute('SELECT * FROM `usermovie` WHERE `genre` = :genre', {
+        const [results] = await pool.execute('SELECT * FROM `usermovie` WHERE `genre` = :genre ORDER BY `rate` DESC', {
                 genre,
             }) as MovieRecordResponseType;
 
