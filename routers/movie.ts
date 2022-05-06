@@ -1,6 +1,6 @@
 import {Router} from "express";
-import {GenreRecord} from "../records/genre.record";
 import {MovieRecord} from "../records/movie.record";
+import {MovieEntity} from "../types";
 
 export const movieRouter = Router();
 
@@ -10,7 +10,11 @@ movieRouter
         res.json(await MovieRecord.getAllOfGenre(genre));
     })
     .post('/', async (req, res) => {
-        const newMovie = new MovieRecord(req.body);
+        const movie: MovieEntity = {
+            ...req.body,
+            rate: Number(req.body.rate)
+        }
+        const newMovie = new MovieRecord(movie);
         await newMovie.insert();
 
         res.json(newMovie);
