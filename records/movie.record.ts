@@ -29,14 +29,24 @@ export class MovieRecord implements MovieEntity {
     }
 
     async checkGenre(objGenre: string): Promise<boolean> {
+        let result;
         const genreArray = await GenreRecord.getAll()
 
         return !genreArray.includes(objGenre);
     }
 
+    async checkTitle(): Promise<boolean> {
+        const [results] = await pool.execute('SELECT * FROM `usermovie`') as MovieRecordResponseType;
+
+        return !results.find(movie => movie.title === this.title)
+    }
+
     async insert(): Promise<void> {
         if (await this.checkGenre(this.genre)) {
             throw new ValidationError('unknown genre, different with genres in database');
+        }
+        if(await this.checkTitle()) {
+            throw new ValidationError('This movie is already on your list');
         }
 
         if (!this.id) {
