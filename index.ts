@@ -15,7 +15,9 @@ app.use(express.json());
 app.use('/genre', genreRouter)
 app.use('/movie', movieRouter)
 
+
 app.use(handleError)
+
 
 app.listen(3001, '0.0.0.0', () => {
     console.log('Listening on http://localhost:3001');
