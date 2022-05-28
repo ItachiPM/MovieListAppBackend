@@ -6,7 +6,7 @@ export const handleError = (err: Error, req: Request, res: Response, next: NextF
     console.log(err);
     res
         .status(err instanceof ValidationError ? 400 : 500)
-        .render('error', {
+        .json( {
             message: err instanceof ValidationError ? err.message : 'Sorry, lets try again for the couple of minute later...'
         })
 }

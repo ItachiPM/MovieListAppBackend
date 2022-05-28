@@ -5,7 +5,10 @@
     "sourceMap": true,
     "target": "ES6",
     "downlevelIteration": true,
-    "lib": ["es6", "dom.iterable"],
+    "lib": [
+      "es6",
+      "dom.iterable"
+    ],
     "outDir": "dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
